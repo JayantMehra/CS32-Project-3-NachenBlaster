@@ -7,15 +7,22 @@
 
 // Students:  Add code to this file, StudentWorld.cpp, Actor.h, and Actor.cpp
 
-class StudentWorld : public GameWorld
-{
+
+class Actor;
+class NachenBlaster;
+
+class StudentWorld : public GameWorld {
 public:
     StudentWorld(std::string assetDir);
     virtual int init();
     virtual int move();
     virtual void cleanUp();
+    void initializeStars();
+    void createNewStars();
 
 private:
+    std::vector<Actor*> actors;
+    NachenBlaster* NachenB;
 };
 
 #endif // STUDENTWORLD_H_
