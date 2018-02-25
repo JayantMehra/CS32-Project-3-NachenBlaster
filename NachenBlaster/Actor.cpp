@@ -276,7 +276,3 @@ void Goodie::doSomething() {
     
 }
 
-
-
-
-

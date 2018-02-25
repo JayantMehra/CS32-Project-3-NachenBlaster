@@ -194,7 +194,7 @@ public:
         m_type = type;
     }
     virtual void doSomething();
-    virtual char typeOfActor();
+    virtual char typeOfActor() = 0;
     virtual char getType();
 private:
     //virtual bool checkForPickup() = 0;
