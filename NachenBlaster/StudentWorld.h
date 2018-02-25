@@ -28,7 +28,7 @@ public:
     void addShips();
     void addActor(Actor* newActor);
     void deleteDeadActors();
-    void doSomething();
+    int doSomething();
     bool AlienNBCollision(Alien* alien);
     void AlienNBCollisionAftermath(int damagePoints, int scoreIncrease, Alien* alien, char typeOfAlien);
     bool AlienProjectileCollision(Alien *alien, int scoreIncrease, char typeOfAlien);

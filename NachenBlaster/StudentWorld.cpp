@@ -36,20 +36,19 @@ int StudentWorld::init() {
 }
 
 int StudentWorld::move() {
+
+    createNewStars();
+    addShips();
     
-    if (shipsDestroyedSoFar == totalShipsToBeDestroyed)
-        return GWSTATUS_FINISHED_LEVEL;
+    int gameStatus = doSomething();
     
-    if (!NachenB->getStatus()) {
-        decLives();
-        return GWSTATUS_PLAYER_DIED;
+    switch (gameStatus) {
+        case 1: return GWSTATUS_PLAYER_DIED; break;
+        case 3: return GWSTATUS_FINISHED_LEVEL; break;
     }
     
-    createNewStars();
-    updateStatusBar();
-    addShips();
-    doSomething();
     deleteDeadActors();
+    updateStatusBar();
     
     return GWSTATUS_CONTINUE_GAME;
 }
@@ -140,12 +139,26 @@ void StudentWorld::deleteDeadActors() {
     }
 }
 
-void StudentWorld::doSomething() {
+int StudentWorld::doSomething() {
     NachenB->doSomething();
-    for (size_t i = 0; i < actors.size(); i++) {
-        if (actors[i]->getStatus())
-            actors[i]->doSomething();
+    if (!NachenB->getStatus()) {
+        decLives();
+        return 1;
     }
+    
+    for (size_t i = 0; i < actors.size(); i++) {
+        if (actors[i]->getStatus()){
+            actors[i]->doSomething();
+            if (!NachenB->getStatus()) {
+                decLives();
+                return 1;
+            }
+            
+            if (shipsDestroyedSoFar == totalShipsToBeDestroyed)
+                return 3;
+        }
+    }
+    return 2;
 }
 
 bool StudentWorld::AlienNBCollision(Alien* alien) {
@@ -210,6 +223,7 @@ bool StudentWorld::turnipNBCollision(Turnip *turnip, int damagePoints) {
                   NachenB->getRadius())) {
         NachenB->setHitPoints(-1*damagePoints);
         turnip->setStatus(0);
+        playSound(SOUND_BLAST);
         return true;
     }
         
@@ -221,6 +235,7 @@ bool StudentWorld::torpedoNBCollision(FlatulenceTorpedo *torpedo, int damagePoin
                   NachenB->getRadius()) && torpedo->getFiredBy() == 'S') {
         NachenB->setHitPoints(-1*damagePoints);
         torpedo->setStatus(0);
+        playSound(SOUND_BLAST);
         return true;
     }
     

@@ -76,6 +76,7 @@ public:
         m_hit_points = hit_points;
         m_flight_plan = flightPlan;
         m_speed = speed;
+        moveTowards = 0;
     }
     virtual void doSomething();
     virtual char typeOfActor();
@@ -86,13 +87,17 @@ public:
     void setSpeed(double speed);
     int getHitPoints();
     void setHitPoints(int hit_points);
+    void setMoveTowards(int move);
+    int getMoveTowards();
 private:
     virtual bool checkForCollisionWithNB() = 0;
     virtual bool checkForCollisionWithProjectile() = 0;
     virtual bool fireProjectile() = 0;
+    virtual void moveAndFire() = 0;
     int m_hit_points;
     int m_flight_plan;
     double m_speed;
+    int moveTowards;
 };
 
 class Smallgon: public Alien {
@@ -104,6 +109,7 @@ public:
     virtual bool checkForCollisionWithNB();
     virtual bool checkForCollisionWithProjectile();
     virtual bool fireProjectile();
+    virtual void moveAndFire();
 };
 
 class Smoregon: public Alien {
@@ -115,6 +121,7 @@ public:
     virtual bool checkForCollisionWithNB();
     virtual bool checkForCollisionWithProjectile();
     virtual bool fireProjectile();
+    virtual void moveAndFire();
 };
 
 class Snagglegon: public Alien {
@@ -126,6 +133,7 @@ public:
     virtual bool checkForCollisionWithNB();
     virtual bool checkForCollisionWithProjectile();
     virtual bool fireProjectile();
+    virtual void moveAndFire();
 };
 
 class Projectile: public Actor {
@@ -301,6 +309,16 @@ int Alien::getHitPoints() {
 inline
 void Alien::setHitPoints(int hit_points) {
     m_hit_points += hit_points;
+}
+
+inline
+void Alien::setMoveTowards(int move) {
+    moveTowards = move;
+}
+
+inline
+int Alien::getMoveTowards() {
+    return moveTowards;
 }
 
 inline

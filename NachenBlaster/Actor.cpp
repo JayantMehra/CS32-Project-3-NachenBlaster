@@ -106,37 +106,7 @@ void Alien::doSomething() {
     if (checkForCollisionWithProjectile())
         return;
     
-    if (getFlightPlan() == 0 || getY() == 0 || getY() == VIEW_HEIGHT-1) {
-        if (getY() >= VIEW_HEIGHT-1)
-            setDirection(225);  // DOWN AND LEFT
-        else if (getY() <= 0)
-            setDirection(135);   // UP AND LEFT
-        else {
-            int randomDirection = randInt(1, 3);
-            switch (randomDirection) {
-                case 1 : setDirection(0); break;
-                case 2 : setDirection(225); break;
-                case 3 : setDirection(135);
-            }
-        }
-        setFlightPlan(randInt(1, 32));
-    }
-    
-    if (getWorld()->alienNearNachenBlaster(this)) {
-        if (fireProjectile())
-            return;
-    }
-    
-    setFlightPlan(getFlightPlan()-1);
-    double speed = getSpeed();
-    if (getDirection() == 225)
-        moveTo(getX() - speed, getY() - speed);
-    
-    else if (getDirection() == 135)
-        moveTo(getX() - speed, getY() + speed);
-    
-    else
-        moveTo(getX() - speed, getY());
+    moveAndFire();
     
     if (checkForCollisionWithNB())
         return;
@@ -170,6 +140,40 @@ bool Smallgon::fireProjectile() {
     return false;
 }
 
+void Smallgon::moveAndFire() {
+    if (getFlightPlan() == 0 || getY() <= 0 || getY() >= VIEW_HEIGHT-1) {
+        if (getY() >= VIEW_HEIGHT-1)
+            setMoveTowards(1);  // DOWN AND LEFT
+        else if (getY() <= 0)
+            setMoveTowards(2);   // UP AND LEFT
+        else {
+            int randomDirection = randInt(1, 3);
+            switch (randomDirection) {
+                case 1 : setMoveTowards(1); break;
+                case 2 : setMoveTowards(2); break;
+                case 3 : setMoveTowards(3);
+            }
+        }
+        setFlightPlan(randInt(1, 32));
+    }
+    
+    if (getWorld()->alienNearNachenBlaster(this)) {
+        if (fireProjectile())
+            return;
+    }
+    
+    setFlightPlan(getFlightPlan()-1);
+    double speed = getSpeed();
+    if (getMoveTowards() == 1)
+        moveTo(getX() - speed, getY() - speed);
+    
+    else if (getMoveTowards() == 2)
+        moveTo(getX() - speed, getY() + speed);
+    
+    else
+        moveTo(getX() - speed, getY());
+}
+
 bool Smoregon::checkForCollisionWithNB() {
     if (getWorld()->AlienNBCollision(this)) {
         getWorld()->AlienNBCollisionAftermath(5, 250, this, '2');
@@ -200,6 +204,39 @@ bool Smoregon::fireProjectile() {
     return false;
 }
 
+void Smoregon::moveAndFire() {
+    if (getFlightPlan() == 0 || getY() <= 0 || getY() >= VIEW_HEIGHT-1) {
+        if (getY() >= VIEW_HEIGHT-1)
+            setMoveTowards(1);  // DOWN AND LEFT
+        else if (getY() <= 0)
+            setMoveTowards(2);   // UP AND LEFT
+        else {
+            int randomDirection = randInt(1, 3);
+            switch (randomDirection) {
+                case 1 : setMoveTowards(1); break;
+                case 2 : setMoveTowards(2); break;
+                case 3 : setMoveTowards(3);
+            }
+        }
+        setFlightPlan(randInt(1, 32));
+    }
+    
+    if (getWorld()->alienNearNachenBlaster(this)) {
+        if (fireProjectile())
+            return;
+    }
+    
+    setFlightPlan(getFlightPlan()-1);
+    double speed = getSpeed();
+    if (getMoveTowards() == 1)
+        moveTo(getX() - speed, getY() - speed);
+    
+    else if (getMoveTowards() == 2)
+        moveTo(getX() - speed, getY() + speed);
+    
+    else
+        moveTo(getX() - speed, getY());
+}
 
 bool Snagglegon::checkForCollisionWithNB() {
     if (getWorld()->AlienNBCollision(this)) {
@@ -220,12 +257,36 @@ bool Snagglegon::fireProjectile() {
     int rand = randInt(1, (15/getWorld()->getLevel())+10);
     if (rand == 1) {
         getWorld()->addActor(new FlatulenceTorpedo(IID_TORPEDO, getX()-14, getY(), 180, 0.5, 1, getWorld(), 1, 'S'));
-        getWorld()->playSound(SOUND_ALIEN_SHOOT);
+        getWorld()->playSound(SOUND_TORPEDO);
         return true;
     }
     return false;
 }
 
+void Snagglegon::moveAndFire() {
+    if (getY() <= 0 || getY() >= VIEW_HEIGHT-1) {
+        if (getY() >= VIEW_HEIGHT-1)
+            setMoveTowards(1);  // DOWN AND LEFT
+        else if (getY() <= 0)
+            setMoveTowards(2);   // UP AND LEFT
+    }
+    
+    if (getWorld()->alienNearNachenBlaster(this)) {
+        if (fireProjectile())
+            return;
+    }
+    
+    
+    double speed = getSpeed();
+    if (getMoveTowards() == 1)
+        moveTo(getX() - speed, getY() - speed);
+    
+    else if (getMoveTowards() == 2)
+        moveTo(getX() - speed, getY() + speed);
+    
+    else
+        moveTo(getX() - speed, getY() - speed);
+}
 
 void Projectile::doSomething() {
     if (!getStatus())
@@ -242,7 +303,7 @@ void Projectile::doSomething() {
 void Cabage::moveAndCheckForCollision() {
 
     moveTo(getX()+8, getY());
-    setDirection(getDirection()-20);
+    setDirection(getDirection()+20);
 }
 
 void Turnip::moveAndCheckForCollision() {
@@ -251,7 +312,7 @@ void Turnip::moveAndCheckForCollision() {
         return;
     
     moveTo(getX()-6, getY());
-    setDirection(getDirection()-20);
+    setDirection(getDirection()+20);
 }
 
 void FlatulenceTorpedo::moveAndCheckForCollision() {
