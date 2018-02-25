@@ -250,7 +250,7 @@ void StudentWorld::SmoregonDropGoodie(double x, double y) {
         if (rand2 == 1)
             actors.push_back(new Repair(IID_REPAIR_GOODIE, x, y, 0, 0.5, 1, this, 1, 'R'));
         else
-            actors.push_back(new FlatulenceTorpedo(IID_TORPEDO_GOODIE, x, y, 0, 0.5, 1, this, 1, 'F'));
+            actors.push_back(new Torpedo(IID_TORPEDO_GOODIE, x, y, 0, 0.5, 1, this, 1, 'F'));
     }
 }
 

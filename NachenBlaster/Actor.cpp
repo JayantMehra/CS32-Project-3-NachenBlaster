@@ -62,6 +62,15 @@ void NachenBlaster::doSomething() {
             if (m_energy_points >= 5) {
                 getWorld()->addActor(new Cabage(IID_CABBAGE, getX()+12, getY(), 0, 0.5, 1, getWorld(), 1));
                 m_energy_points -= 5;
+                getWorld()->playSound(SOUND_PLAYER_SHOOT);
+            }
+        }
+            break;
+        case KEY_PRESS_TAB: {
+            if (m_flatulence_torpedoes > 0) {
+                getWorld()->addActor(new FlatulenceTorpedo(IID_TORPEDO, getX()+12, getY(), 0, 0.5, 1, getWorld(), 1, 'N'));
+                m_flatulence_torpedoes--;
+                getWorld()->playSound(SOUND_TORPEDO);
             }
         }
     }
@@ -210,7 +219,7 @@ bool Snagglegon::checkForCollisionWithProjectile() {
 bool Snagglegon::fireProjectile() {
     int rand = randInt(1, (15/getWorld()->getLevel())+10);
     if (rand == 1) {
-        getWorld()->addActor(new FlatulenceTorpedo(IID_TORPEDO, getX()-14, getY(), 0, 0.5, 1, getWorld(), 1, 'S'));
+        getWorld()->addActor(new FlatulenceTorpedo(IID_TORPEDO, getX()-14, getY(), 180, 0.5, 1, getWorld(), 1, 'S'));
         getWorld()->playSound(SOUND_ALIEN_SHOOT);
         return true;
     }
@@ -250,8 +259,11 @@ void FlatulenceTorpedo::moveAndCheckForCollision() {
     if (getWorld()->torpedoNBCollision(this, 8))
         return;
     
-    moveTo(getX()-6, getY());
-    setDirection(getDirection()-20);
+    if (getFiredBy() == 'S')
+        moveTo(getX()-8, getY());
+    else
+        moveTo(getX()+8, getY());
+    
 }
 
 void Goodie::doSomething() {
@@ -262,9 +274,6 @@ void Goodie::doSomething() {
         setStatus(0);
         return;
     }
-    
-    //if (checkForPickup())
-    //    return;
     
     if (getWorld()->goodiePickup(this, m_type))
         return;
