@@ -12,7 +12,7 @@ void Star::doSomething() {
     
     moveTo(currentX-1, currentY);
     
-    if (getX() == -1)
+    if (getX() <= -1)
         setStatus(0);
 }
 
@@ -26,11 +26,15 @@ void NachenBlaster::doSomething() {
     if (!getStatus())
         return;
     
-    if (m_hit_points <= 0)
+    if (m_hit_points <= 0) {
         setStatus(0);
+        return;
+    }
     
+    /*
     if (m_energy_points < 30)
         m_energy_points++;
+     */
     
     int val;
     getWorld()->getKey(val);
@@ -106,7 +110,8 @@ void Alien::doSomething() {
     if (checkForCollisionWithProjectile())
         return;
     
-    moveAndFire();
+    if (moveAndFire())
+        return;
     
     if (checkForCollisionWithNB())
         return;
@@ -140,7 +145,7 @@ bool Smallgon::fireProjectile() {
     return false;
 }
 
-void Smallgon::moveAndFire() {
+bool Smallgon::moveAndFire() {
     if (getFlightPlan() == 0 || getY() <= 0 || getY() >= VIEW_HEIGHT-1) {
         if (getY() >= VIEW_HEIGHT-1)
             setMoveTowards(1);  // DOWN AND LEFT
@@ -159,10 +164,9 @@ void Smallgon::moveAndFire() {
     
     if (getWorld()->alienNearNachenBlaster(this)) {
         if (fireProjectile())
-            return;
+            return true;
     }
     
-    setFlightPlan(getFlightPlan()-1);
     double speed = getSpeed();
     if (getMoveTowards() == 1)
         moveTo(getX() - speed, getY() - speed);
@@ -172,6 +176,10 @@ void Smallgon::moveAndFire() {
     
     else
         moveTo(getX() - speed, getY());
+    
+    setFlightPlan(getFlightPlan()-1);
+    
+    return false;
 }
 
 bool Smoregon::checkForCollisionWithNB() {
@@ -197,14 +205,14 @@ bool Smoregon::fireProjectile() {
         return true;
     }
     if (rand == 2) {
-        setDirection(0);
+        setMoveTowards(3);
         setFlightPlan(VIEW_WIDTH);
         setSpeed(5);
     }
     return false;
 }
 
-void Smoregon::moveAndFire() {
+bool Smoregon::moveAndFire() {
     if (getFlightPlan() == 0 || getY() <= 0 || getY() >= VIEW_HEIGHT-1) {
         if (getY() >= VIEW_HEIGHT-1)
             setMoveTowards(1);  // DOWN AND LEFT
@@ -223,10 +231,10 @@ void Smoregon::moveAndFire() {
     
     if (getWorld()->alienNearNachenBlaster(this)) {
         if (fireProjectile())
-            return;
+            return true;
     }
     
-    setFlightPlan(getFlightPlan()-1);
+    
     double speed = getSpeed();
     if (getMoveTowards() == 1)
         moveTo(getX() - speed, getY() - speed);
@@ -236,6 +244,10 @@ void Smoregon::moveAndFire() {
     
     else
         moveTo(getX() - speed, getY());
+    
+    setFlightPlan(getFlightPlan()-1);
+    
+    return false;
 }
 
 bool Snagglegon::checkForCollisionWithNB() {
@@ -263,7 +275,7 @@ bool Snagglegon::fireProjectile() {
     return false;
 }
 
-void Snagglegon::moveAndFire() {
+bool Snagglegon::moveAndFire() {
     if (getY() <= 0 || getY() >= VIEW_HEIGHT-1) {
         if (getY() >= VIEW_HEIGHT-1)
             setMoveTowards(1);  // DOWN AND LEFT
@@ -273,7 +285,7 @@ void Snagglegon::moveAndFire() {
     
     if (getWorld()->alienNearNachenBlaster(this)) {
         if (fireProjectile())
-            return;
+            return true;
     }
     
     
@@ -286,6 +298,8 @@ void Snagglegon::moveAndFire() {
     
     else
         moveTo(getX() - speed, getY() - speed);
+    
+    return false;
 }
 
 void Projectile::doSomething() {
@@ -313,6 +327,9 @@ void Turnip::moveAndCheckForCollision() {
     
     moveTo(getX()-6, getY());
     setDirection(getDirection()+20);
+    
+    if (getWorld()->turnipNBCollision(this, 2))
+        return;
 }
 
 void FlatulenceTorpedo::moveAndCheckForCollision() {
@@ -324,6 +341,9 @@ void FlatulenceTorpedo::moveAndCheckForCollision() {
         moveTo(getX()-8, getY());
     else
         moveTo(getX()+8, getY());
+    
+    if (getWorld()->torpedoNBCollision(this, 8))
+        return;
     
 }
 

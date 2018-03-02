@@ -6,6 +6,7 @@
 #include <iomanip>
 #include <cmath>
 #include <algorithm>
+#include <iostream>
 using namespace std;
 
 double euclideanDistance(double x1, double y1, double x2, double y2);
@@ -29,9 +30,10 @@ int StudentWorld::init() {
     maxShipsOnTheScreen = 4 + 0.5*getLevel();
     totalShipsToBeDestroyed = 6 + 4*getLevel();
     
-    initializeStars();
+    
     NachenB = new NachenBlaster(IID_NACHENBLASTER, 0, 128, 0, 1.0, 0, this, 50, 30, 1);
-
+    initializeStars();
+    
     return GWSTATUS_CONTINUE_GAME;
 }
 
@@ -197,6 +199,7 @@ bool StudentWorld::AlienProjectileCollision(Alien *alien, int scoreIncrease, cha
                     actors.push_back(new Explosion(IID_EXPLOSION, alien->getX(), alien->getY(), 0, 1, 0, this, 4));
                     shipsDestroyedSoFar++;
                     
+                    
                     switch (typeOfAlien) {
                         case '2': SmoregonDropGoodie(alien->getX(), alien->getY()); break;
                         case '3': SnagglegonDropGoodie(alien->getX(), alien->getY()); break;
@@ -213,7 +216,7 @@ bool StudentWorld::AlienProjectileCollision(Alien *alien, int scoreIncrease, cha
 }
 
 bool StudentWorld::alienNearNachenBlaster(Alien *alien) {
-    if (NachenB->getY() <= alien->getY() && abs(NachenB->getY()-alien->getY()) <= 4)
+    if (NachenB->getX() <= alien->getX() && abs(NachenB->getY()-alien->getY()) <= 4)
         return true;
     return false;
 }

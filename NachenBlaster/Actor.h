@@ -79,7 +79,7 @@ public:
         moveTowards = 0;
     }
     virtual void doSomething();
-    virtual char typeOfActor();
+    //virtual char typeOfActor();
     bool collision();
     int getFlightPlan();
     void setFlightPlan(int f_p);
@@ -93,7 +93,7 @@ private:
     virtual bool checkForCollisionWithNB() = 0;
     virtual bool checkForCollisionWithProjectile() = 0;
     virtual bool fireProjectile() = 0;
-    virtual void moveAndFire() = 0;
+    virtual bool moveAndFire() = 0;
     int m_hit_points;
     int m_flight_plan;
     double m_speed;
@@ -109,7 +109,7 @@ public:
     virtual bool checkForCollisionWithNB();
     virtual bool checkForCollisionWithProjectile();
     virtual bool fireProjectile();
-    virtual void moveAndFire();
+    virtual bool moveAndFire();
 };
 
 class Smoregon: public Alien {
@@ -121,7 +121,7 @@ public:
     virtual bool checkForCollisionWithNB();
     virtual bool checkForCollisionWithProjectile();
     virtual bool fireProjectile();
-    virtual void moveAndFire();
+    virtual bool moveAndFire();
 };
 
 class Snagglegon: public Alien {
@@ -133,7 +133,7 @@ public:
     virtual bool checkForCollisionWithNB();
     virtual bool checkForCollisionWithProjectile();
     virtual bool fireProjectile();
-    virtual void moveAndFire();
+    virtual bool moveAndFire();
 };
 
 class Projectile: public Actor {
@@ -141,7 +141,7 @@ public:
     Projectile(int imageID, double startX, double startY, int dir,
                double size, int depth, StudentWorld* ptr, int status): Actor(imageID,startX, startY, dir, size, depth, ptr, status) {}
     virtual void doSomething();
-    virtual char typeOfActor();
+    
 private:
     virtual void moveAndCheckForCollision() = 0;
 
@@ -153,7 +153,7 @@ public:
               int dir, double size, int depth, StudentWorld* ptr, int status): Projectile (imageID, startX, startY, dir,
                                                                                            size, depth, ptr, status)
     {}
-    //virtual void doSomething();
+    
     virtual char typeOfActor();
     virtual void moveAndCheckForCollision();
 };
@@ -164,7 +164,7 @@ public:
            int dir, double size, int depth, StudentWorld* ptr, int status): Projectile (imageID, startX, startY, dir,
     size, depth, ptr, status)
     {}
-    //virtual void doSomething();
+    
     virtual char typeOfActor();
     virtual void moveAndCheckForCollision();
 };
@@ -172,12 +172,11 @@ public:
 class FlatulenceTorpedo: public Projectile {
 public:
     FlatulenceTorpedo(int imageID, double startX, double startY,
-           int dir, double size, int depth, StudentWorld* ptr, int status, char firedBy): Projectile (imageID, startX, startY, dir,
-                                                                                        size, depth, ptr, status)
+           int dir, double size, int depth, StudentWorld* ptr, int status, char firedBy): Projectile (imageID, startX, startY, dir, size, depth, ptr, status)
     {
         m_fired_by = firedBy;
     }
-    //virtual void doSomething();
+    
     virtual char typeOfActor();
     virtual void moveAndCheckForCollision();
     char getFiredBy();
@@ -202,10 +201,8 @@ public:
         m_type = type;
     }
     virtual void doSomething();
-    virtual char typeOfActor() = 0;
     virtual char getType();
 private:
-    //virtual bool checkForPickup() = 0;
     char m_type;
 };
 
@@ -331,19 +328,15 @@ char Star::typeOfActor() {
     return 'S';
 }
 
+/*
 inline
 char Alien::typeOfActor() {
     return 'A';
 }
-
+*/
 inline
 char Explosion::typeOfActor() {
     return 'E';
-}
-
-inline
-char Projectile::typeOfActor() {
-    return 'P';
 }
 
 inline

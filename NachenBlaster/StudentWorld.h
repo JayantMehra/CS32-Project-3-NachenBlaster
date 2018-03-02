@@ -22,13 +22,7 @@ public:
     virtual int init();
     virtual int move();
     virtual void cleanUp();
-    void initializeStars();
-    void createNewStars();
-    void updateStatusBar();
-    void addShips();
     void addActor(Actor* newActor);
-    void deleteDeadActors();
-    int doSomething();
     bool AlienNBCollision(Alien* alien);
     void AlienNBCollisionAftermath(int damagePoints, int scoreIncrease, Alien* alien, char typeOfAlien);
     bool AlienProjectileCollision(Alien *alien, int scoreIncrease, char typeOfAlien);
@@ -36,11 +30,18 @@ public:
     bool turnipNBCollision(Turnip* turnip, int damagePoints);
     bool torpedoNBCollision(FlatulenceTorpedo* torpedo, int damagePoints);
     bool goodiePickup(Goodie* goodie, char type);
-    void SmoregonDropGoodie(double x, double y);
-    void SnagglegonDropGoodie(double x, double y);
     ~StudentWorld();
 
 private:
+    void initializeStars();
+    void createNewStars();
+    void updateStatusBar();
+    void addShips();
+    void deleteDeadActors();
+    int doSomething();
+    void SmoregonDropGoodie(double x, double y);
+    void SnagglegonDropGoodie(double x, double y);
+    
     std::vector<Actor*> actors;
     NachenBlaster* NachenB;
     int shipsDestroyedSoFar;
