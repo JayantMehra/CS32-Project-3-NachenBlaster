@@ -131,7 +131,7 @@ void StudentWorld::updateStatusBar() {
 void StudentWorld::deleteDeadActors() {
     for (size_t i = 0; i < actors.size(); i++) {
         if (!actors[i]->getStatus()) {
-            if (actors[i]->typeOfActor() == 'A')
+            if (actors[i]->typeOfActor() == '1' || actors[i]->typeOfActor() == '2' || actors[i]->typeOfActor() == '3')
                 currentShipsOnTheScreen--;
             
             delete actors[i];

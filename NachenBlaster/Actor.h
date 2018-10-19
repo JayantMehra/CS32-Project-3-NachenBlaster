@@ -110,6 +110,7 @@ public:
     virtual bool checkForCollisionWithProjectile();
     virtual bool fireProjectile();
     virtual bool moveAndFire();
+    virtual char typeOfActor();
 };
 
 class Smoregon: public Alien {
@@ -122,6 +123,7 @@ public:
     virtual bool checkForCollisionWithProjectile();
     virtual bool fireProjectile();
     virtual bool moveAndFire();
+    virtual char typeOfActor();
 };
 
 class Snagglegon: public Alien {
@@ -134,6 +136,7 @@ public:
     virtual bool checkForCollisionWithProjectile();
     virtual bool fireProjectile();
     virtual bool moveAndFire();
+    virtual char typeOfActor();
 };
 
 class Projectile: public Actor {
@@ -328,12 +331,21 @@ char Star::typeOfActor() {
     return 'S';
 }
 
-/*
-inline
-char Alien::typeOfActor() {
-    return 'A';
-}
-*/
+ inline
+ char Smallgon::typeOfActor() {
+ return '1';
+ }
+
+ inline
+ char Smoregon::typeOfActor() {
+ return '2';
+ }
+
+ inline
+ char Snagglegon::typeOfActor() {
+ return '3';
+ }
+
 inline
 char Explosion::typeOfActor() {
     return 'E';
